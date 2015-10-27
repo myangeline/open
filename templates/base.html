@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %} - open</title>
+    <link rel="stylesheet" href="/static/css/base.css"/>
+    {% block style %}{% endblock %}
+</head>
+<body>
+<div class="outerwrapper">
+    <div class="pageheader">
+        <ul>
+            <li><a href="#">首页</a></li>
+            <li><a href="#">笔记</a></li>
+            <li><a href="#">源码</a></li>
+        </ul>
+        <div>
+            <a href="/">
+                <img src="/static/images/logo.png" alt="open logo">
+            </a>
+        </div>
+    </div>
+
+    <div class="sphinxsidebar" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper" style="top: 0;">
+            <h3><a href="/">文章分类</a></h3>
+            <ul>
+                <li>
+                    <a class="reference internal" href="#">Pygments</a>
+                    <ul>
+                        <li>qqq</li>
+                        <li>qqq</li>
+                        <li>qqq</li>
+                        <li>qqq</li>
+                    </ul>
+                </li>
+            </ul>
+
+            <div id="searchbox" role="search">
+                <h3>快速索引</h3>
+
+                <form class="search" action="/search/" method="get">
+                    <input type="text" name="query" placeholder="搜索文章">
+                    <input type="submit" value="搜索">
+                    <input type="hidden" name="check_keywords" value="yes">
+                    <input type="hidden" name="area" value="default">
+                </form>
+                <p class="searchtip" style="font-size: 90%">
+                    输入需要搜索的关键字
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="document">
+        <div class="documentwrapper">
+            <div class="bodywrapper">
+                <div class="body">
+                    <div class="section">
+                        {% block content %}{% endblock %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clearer"></div>
+        <div class="footer">
+            © Copyright 2014. Created using web.py
+        </div>
+    </div>
+</div>
+
+</body>
+{% block script %}{% endblock %}
+</html>

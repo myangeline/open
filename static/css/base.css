@@ -1,0 +1,98 @@
+body{
+    font-family: PT Sans, 'Lucida Grande', 'Lucida Sans Unicode', 'Geneva', 'Verdana', sans-serif;
+    font-size: 14px;
+    text-align: center;
+    background-color: #f9f9f9;
+    color: black;
+    padding: 0;
+    margin: 0 auto;
+    min-width: 780px;
+    max-width: 1080px;
+}
+
+div .footer{
+    color: #666666;
+    text-shadow: 0 0 2px rgba(255, 255, 255, 0.8);
+    padding: 2em;
+    text-align: center;
+    clear: both;
+    font-size: 0.8em;
+}
+
+.outerwrapper{
+    background-color: aliceblue;
+}
+
+.pageheader {
+    text-align: left;
+    padding: 10px 15px;
+}
+
+.pageheader ul {
+    float: right;
+    color: white;
+    list-style-type: none;
+    padding-left: 0;
+    margin-top: 40px;
+    margin-right: 10px;
+}
+
+.pageheader li {
+    float: left;
+    margin: 0 0 0 10px;
+}
+
+.pageheader li a {
+    border-radius: 3px;
+    padding: 8px 12px;
+    color: #666666;
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.pageheader li a:hover{
+    background-color: bisque;
+}
+
+a {
+    color: #36852e;
+    text-decoration: none;
+}
+
+div.sphinxsidebar {
+    margin: 0;
+    padding: 0 0 15px 15px;
+    width: 210px;
+    float: left;
+    font-size: 1em;
+    text-align: left;
+}
+
+div.sphinxsidebar #searchbox input[type="text"] {
+    width: 150px;
+    padding-left: 10px;
+}
+
+div.sphinxsidebar input {
+    border: 1px solid #aaa;
+    font-family: PT Sans, 'Lucida Grande', 'Lucida Sans Unicode', 'Geneva', 'Verdana', sans-serif;
+    font-size: 1em;
+}
+
+div.document {
+    text-align: left;
+}
+
+div.bodywrapper {
+    margin: 0 12px 0 240px;
+    background-color: white;
+}
+
+div.body {
+    margin: 0;
+    padding: 0.5em 20px 20px 20px;
+}
+
+div.clearer {
+    clear: both;
+}
+
