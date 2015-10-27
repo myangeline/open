@@ -6,7 +6,8 @@ from conf import settings
 __author__ = 'sunshine'
 
 urls = (
-    '/', 'Index'
+    '/', 'Index',
+    '/manage', 'ManageCategory',
 )
 
 app = web.application(urls, locals())
@@ -22,7 +23,7 @@ class Index:
 
 class ManageCategory:
     def GET(self):
-        return
+        return render.manage_category(locals())
 
 
 if __name__ == '__main__':
