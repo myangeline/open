@@ -1,30 +1,42 @@
-{% extends 'base.html' %}
+{% extends 'base-manage.html' %}
 
 {% block title %}
-    manage blog
+manage blog
 {% endblock %}
 
 {% block style %}
-
+<style>
+    .my-btn-write{
+        /*background-color: aliceblue;*/
+    }
+</style>
 {% endblock %}
 
 {% block content %}
- <div>
-     <div>
-         <label for="">标题</label>
-         <input type="text"/>
-     </div>
-
-     <div>
-         <label for="">摘要</label>
-         <input type="text"/>
-     </div>
-
-     <div>
-         <label for="">内容</label>
-         <textarea cols="80" rows="10"></textarea>
-     </div>
- </div>
+<div class="content">
+    <button class="uk-button uk-button-primary my-btn-write"><i class="uk-icon-plus"></i> 写文章</button>
+    <table class="uk-table uk-table-hover uk-table-striped uk-table-condensed">
+        <thead>
+        <tr>
+            <th>文章名称</th>
+            <th>摘要</th>
+            <th>日期</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>python</td>
+            <td>python基础</td>
+            <td>2015-10-28</td>
+            <td>
+                <a href="#"><i class="uk-icon-edit"></i>编辑</a> /
+                <a href="#"><i class="uk-icon-trash-o"></i>删除</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
 {% endblock %}
 
 {% block script %}

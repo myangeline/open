@@ -5,6 +5,11 @@
     <title>{% block title %}{% endblock %} - open</title>
     <link rel="stylesheet" href="/static/uikit-2.22.0/css/uikit.min.css"/>
     <link rel="stylesheet" href="/static/css/base.css"/>
+    <style>
+        div.bodywrapper {
+            margin: 0 20px;
+        }
+    </style>
     {% block style %}{% endblock %}
 </head>
 <body>
@@ -19,37 +24,6 @@
             <a href="/">
                 <img src="/static/images/logo.png" alt="open logo">
             </a>
-        </div>
-    </div>
-
-    <div class="sphinxsidebar" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper" style="top: 0;">
-            <h3><a href="/">文章分类</a></h3>
-            <ul>
-                <li>
-                    <a class="reference internal" href="#">Pygments</a>
-                    <ul>
-                        <li>qqq</li>
-                        <li>qqq</li>
-                        <li>qqq</li>
-                        <li>qqq</li>
-                    </ul>
-                </li>
-            </ul>
-
-            <div id="searchbox" role="search">
-                <h3>快速索引</h3>
-
-                <form class="search" action="/search/" method="get">
-                    <input type="text" name="query" placeholder="搜索文章">
-                    <input type="submit" value="搜索">
-                    <input type="hidden" name="check_keywords" value="yes">
-                    <input type="hidden" name="area" value="default">
-                </form>
-                <p class="searchtip" style="font-size: 90%">
-                    输入需要搜索的关键字
-                </p>
-            </div>
         </div>
     </div>
 

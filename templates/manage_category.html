@@ -1,25 +1,53 @@
-{% extends 'base.html' %}
+{% extends 'base-manage.html' %}
 
 {% block title %}
-    manage category
+manage category
 {% endblock %}
 
 {% block style %}
+<style>
+    .content {
+        margin-top: 15px;
+    }
 
+    .my-div-category {
+        padding: 5px 5px;
+        text-align: center;
+    }
+</style>
 {% endblock %}
 
 {% block content %}
- <div>
-     <div>
-         <label for="">标题</label>
-         <input type="text"/>
-     </div>
+<div class="content">
+    <form class="uk-form">
+        <div class="uk-grid">
+            <div class="uk-width-1-6 my-div-category">类别名称</div>
+            <input name="category_name" type="text" placeholder="类别名称" class="uk-width-3-5">
+            <div class="uk-width-1-6"><input type="submit" class="uk-button" id="my-btn-save" value="保存"/></div>
+        </div>
+    </form>
 
-     <div>
-         <label for="">摘要</label>
-         <input type="text"/>
-     </div>
- </div>
+    <table class="uk-table uk-table-hover uk-table-striped uk-table-condensed">
+        <thead>
+            <tr>
+                <th>类别名称</th>
+                <th>文章数量</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Table Data</td>
+                <td>Table Data</td>
+                <td>
+                    <a href="#"><i class="uk-icon-edit"></i>编辑</a> /
+                    <a href="#"><i class="uk-icon-trash-o"></i>删除</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>
 {% endblock %}
 
 {% block script %}

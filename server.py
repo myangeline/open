@@ -11,6 +11,7 @@ urls = (
     '/login', 'Login',
     '/manage', 'ManageBlog',
     '/manage/blog', 'ManageBlog',
+    '/manage/blog/edit', 'ManageBlogEdit',
     '/manage/category', 'ManageCategory',
     '/category/(\d+)', 'Category',
     '/blog/(\d+)', 'Blog'
@@ -50,7 +51,14 @@ class ManageBlog:
     博客管理页
     """
     def GET(self):
+        print(web.input())
         return render.manage_blog(locals())
+
+
+class ManageBlogEdit:
+    def GET(self):
+        print(web.ctx.query())
+        return render.manage_blog_edit(locals())
 
 
 class Category:
