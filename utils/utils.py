@@ -2,6 +2,7 @@
 import os
 from jinja2 import Environment
 from jinja2 import FileSystemLoader
+import web
 from conf import settings
 
 __author__ = 'sunshine'
@@ -41,3 +42,17 @@ def upload(filename, f):
     with open(path, 'w') as fh:
         fh.write(f.read())
     return path
+
+
+def get_session(app):
+    """
+    获取session
+    :param app:
+    :return:
+    """
+    if web.config.get('_session') is None:
+        session = web.session.Session(app, web.session.DiskStore('sessions'), {'count': 0})
+        web.config._session = session
+    else:
+        session = web.config._session
+    return session

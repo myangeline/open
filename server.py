@@ -8,10 +8,11 @@ import web
 from web.contrib.template import render_jinja
 
 from conf import settings
+from utils import markdown2
 from utils.dbutils import get_category, add_category, delete_category, update_category, get_all_category, add_blog, \
     get_blog, delete_blog, get_blogs, update_blog
 from utils.templateutils import register
-from utils.utils import upload
+from utils.utils import upload, get_session
 
 __author__ = 'sunshine'
 
@@ -24,16 +25,37 @@ urls = (
     '/manage/blog/delete', 'ManageBlogDelete',
     '/manage/category', 'ManageCategory',
     '/manage/category/edit', 'ManageCategoryEdit',
-    '/category/(\d+)', 'Category',
-    '/blog/(\d+)', 'Blog'
+    '/blog/(\d+)', 'Blog',
+    '/demo', 'Demo'
 )
 
 app = web.application(urls, locals())
+
+# session
+session = get_session(app)
 
 render = render_jinja('templates', encoding='utf-8')
 
 # 注册jinja2模板的自定义过滤器
 register(render)
+
+
+class Demo:
+    def GET(self):
+        with open(u'static/files/bottle笔记.md', 'r') as fh:
+            content = fh.read()
+            # content = highlight(content, PythonLexer(), HtmlFormatter())
+            # print('=============================================================')
+            # resp = requests.post('https://api.github.com/markdown/raw',
+            #                      data=content,
+            #                      headers={'content-type': 'text/plain'})
+            # content = resp.text
+            # content = highlight(content, PythonLexer(), HtmlFormatter())
+            # print(content)
+        # content = markdown2.markdown(content.decode('utf-8'), ['codehilite'])
+        content = markdown2.markdown(content.decode('utf-8'))
+        print(content)
+        return render.demo(locals())
 
 
 class Index:
@@ -57,9 +79,14 @@ class Login:
     """
     登录页
     """
-
     def GET(self):
+        session['name'] = 'admin'
+        print(session['name'], session.name)
+        print(session['count'])
         return render.login(locals())
+
+    def POST(self):
+        pass
 
 
 class ManageCategory:
@@ -146,16 +173,6 @@ class ManageBlogEdit:
         else:
             add_blog(title, summary, path, category_id)
         raise web.seeother('/manage')
-
-
-class Category:
-    """
-    类别
-    """
-
-    def GET(self, category_id):
-        print('category_id:', category_id)
-        return render.category(locals())
 
 
 class Blog:
