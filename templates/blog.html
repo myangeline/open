@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'base-manage.html' %}
 
 {% block title %}
     blog
@@ -9,7 +9,9 @@
 {% endblock %}
 
 {% block content %}
- <h2>blog details page! {{ blog_id }}</h2>
+<div class="content">
+    {{content}}
+</div>
 {% endblock %}
 
 {% block script %}

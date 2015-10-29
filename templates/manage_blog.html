@@ -6,8 +6,8 @@ manage blog
 
 {% block style %}
 <style>
-    .my-btn-write{
-        /*background-color: aliceblue;*/
+    .content{
+        margin-top: 20px;
     }
 </style>
 {% endblock %}
@@ -20,25 +20,48 @@ manage blog
         <tr>
             <th>文章名称</th>
             <th>摘要</th>
+            <th>类别</th>
             <th>日期</th>
             <th>操作</th>
         </tr>
         </thead>
         <tbody>
-        <tr>
-            <td>python</td>
-            <td>python基础</td>
-            <td>2015-10-28</td>
-            <td>
-                <a href="#"><i class="uk-icon-edit"></i>编辑</a> /
-                <a href="#"><i class="uk-icon-trash-o"></i>删除</a>
-            </td>
-        </tr>
+            {% for blog in blogs %}
+                <tr>
+                    <td>{{blog.title}}</td>
+                    <td>{{blog.summary}}</td>
+                    <td>{{blog.name}}</td>
+                    <td>{{blog.created_at}}</td>
+                    <td>
+                        <a href="#" class="my-blog-edit" data="{{blog.id}}"><i class="uk-icon-edit"></i>编辑</a> /
+                        <a href="#" class="my-blog-delete" data="{{blog.id}}"><i class="uk-icon-trash-o"></i>删除</a>
+                    </td>
+                </tr>
+            {% endfor%}
         </tbody>
     </table>
 </div>
 {% endblock %}
 
 {% block script %}
+<script>
+    $(function(){
+        $(".my-btn-write").click(function(){
+            window.location.href = "/manage/blog/edit";
+        });
 
+        $(".my-blog-edit").click(function(){
+            var id = $(this).attr('data');
+            location.href = '/manage/blog/edit?id='+id;
+        });
+
+        $(".my-blog-delete").click(function(){
+            var name = $(this).parent().siblings().first().text();
+            if(confirm("确定删除文章 《"+name+"》 ？")){
+                var id = $(this).attr('data');
+                location.href = '/manage/blog/delete?id='+id;
+            }
+        });
+    })
+</script>
 {% endblock %}

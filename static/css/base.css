@@ -51,6 +51,7 @@ div .footer{
 
 .pageheader li a:hover{
     background-color: bisque;
+    text-decoration: none;
 }
 
 a {

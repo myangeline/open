@@ -11,7 +11,7 @@
 <div class="outerwrapper">
     <div class="pageheader">
         <ul>
-            <li><a href="#">首页</a></li>
+            <li><a href="/">首页</a></li>
             <li><a href="#">笔记</a></li>
             <li><a href="#">源码</a></li>
         </ul>
@@ -24,19 +24,6 @@
 
     <div class="sphinxsidebar" aria-label="main navigation">
         <div class="sphinxsidebarwrapper" style="top: 0;">
-            <h3><a href="/">文章分类</a></h3>
-            <ul>
-                <li>
-                    <a class="reference internal" href="#">Pygments</a>
-                    <ul>
-                        <li>qqq</li>
-                        <li>qqq</li>
-                        <li>qqq</li>
-                        <li>qqq</li>
-                    </ul>
-                </li>
-            </ul>
-
             <div id="searchbox" role="search">
                 <h3>快速索引</h3>
 
@@ -50,6 +37,19 @@
                     输入需要搜索的关键字
                 </p>
             </div>
+            <h3><a href="/">文章分类</a></h3>
+            <ul>
+                {% for blog in blogs %}
+                    <li>
+                        <a class="reference internal" href="#">{{blog}}</a>
+                        <ul>
+                            {% for item in blogs[blog] %}
+                                <li><a href="/blog/{{item.id}}">{{item.title|format_str}}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                {% endfor %}
+            </ul>
         </div>
     </div>
 
@@ -71,5 +71,6 @@
 </div>
 
 </body>
+<script src="/static/js/jquery-1.11.3.min.js"></script>
 {% block script %}{% endblock %}
 </html>

@@ -5,11 +5,26 @@
 {% endblock %}
 
 {% block style %}
-
+<style>
+    .content ul li{
+        list-style-type: none!important;
+    }
+</style>
 {% endblock %}
 
 {% block content %}
-    <h2>index page!</h2>
+    <div class="content">
+        {% for blog in blogs %}
+            <div>
+                <h2>{{blog}}</h2>
+                <ul>
+                    {% for item in blogs[blog] %}
+                        <li><a href="/blog/{{item.id}}">{{loop.index}}. {{item.title}}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endfor%}
+    </div>
 {% endblock %}
 
 {% block script %}

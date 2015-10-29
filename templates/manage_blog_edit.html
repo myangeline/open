@@ -1,23 +1,65 @@
 {% extends 'base-manage.html' %}
 
 {% block title %}
-manage blog
+edit blog
 {% endblock %}
 
 {% block style %}
 <style>
-
+    .content{
+        margin-top: 20px;
+    }
+    .my-btn-back{
+        margin-bottom: 20px;
+    }
 </style>
+<link rel="stylesheet" href="/static/uikit-2.22.0/css/components/form-file.min.css"/>
 {% endblock %}
 
 {% block content %}
 <div class="content">
-    <form class="uk-form">
+    <button class="uk-button uk-button-primary my-btn-back"><i class="uk-icon-angle-left"></i> 返回</button>
+
+    <form class="uk-form" action="/manage/blog/edit" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="id" value="{{blog.id}}"/>
+        <div class="uk-grid">
+            <div class="uk-width-1-10"><lable>类别</lable></div>
+            <div class="uk-width-4-5">
+                <select name="category_id" class="uk-width-1-2">
+                    {% for category in categories %}
+                        <option value="{{category.id}}">{{category.name}}</option>
+                    {% endfor %}
+                </select>
+                <button class="uk-button uk-button-primary" onclick="location.href='/manage/category'">
+                    <i class="uk-icon-plus"></i> 添加类别</button>
+            </div>
+        </div>
 
         <div class="uk-grid">
-            <div class="uk-width-1-2"><input type="text" placeholder="" class="uk-width-1-1"></div>
-            <div class="uk-width-1-4"><input type="text" placeholder="" class="uk-width-1-1"></div>
-            <div class="uk-width-1-4"><input type="text" placeholder="" class="uk-width-1-1"></div>
+            <div class="uk-width-1-10"><lable>标题</lable></div>
+            <div class="uk-width-4-5">
+                <input type="text" name="title" value="{{blog.title}}" placeholder="文章标题(先上传文章可以自动填充)" class="uk-width-1-1" required></div>
+        </div>
+
+        <div class="uk-grid">
+            <div class="uk-width-1-10"><lable>摘要</lable></div>
+            <div class="uk-width-4-5">
+                <input type="text" name="summary" value="{{blog.summary}}" placeholder="文章简介" class="uk-width-1-1" required></div>
+        </div>
+
+        <div class="uk-grid">
+            <div class="uk-width-1-10"><lable>文章</lable></div>
+            <div class="uk-form-file">
+                <button class="uk-button">上传文章</button>
+                <input type="file" name="content" required onchange="preview(this)">
+            </div>
+        </div>
+
+        <div class="uk-grid">
+            <div class="uk-width-1-10"></div>
+            <div class="uk-width-4-5">
+                <button class="uk-button uk-button-primary"><i class="uk-icon-check"></i> 保存</button>
+            </div>
         </div>
 
     </form>
@@ -25,5 +67,26 @@ manage blog
 {% endblock %}
 
 {% block script %}
+<script>
+    function preview(file) {
+        if (file.files && file.files[0]) {
+            var name = file.files[0].name;
+            var names = name.split(".");
+            var suffix = names[names.length-1];
+            if (suffix.toLowerCase() != 'md'){
+                alert("上次文档必须为markdown格式！");
+                return false;
+            }
+            $("input[name='title']").val(names[names.length-2]);
+        }
+    }
 
+    $(function(){
+        var category_id = "{{blog.category_id}}";
+        $("select[name='category_id']").val(category_id);
+        $('.my-btn-back').click(function(){
+            location.href = "/manage";
+        });
+    })
+</script>
 {% endblock %}

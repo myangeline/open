@@ -7,7 +7,7 @@ manage category
 {% block style %}
 <style>
     .content {
-        margin-top: 15px;
+        margin-top: 20px;
     }
 
     .my-div-category {
@@ -19,11 +19,14 @@ manage category
 
 {% block content %}
 <div class="content">
-    <form class="uk-form">
+    <form class="uk-form" action="/manage/category" method="post">
+        <input type="hidden" name="category_id"/>
         <div class="uk-grid">
             <div class="uk-width-1-6 my-div-category">类别名称</div>
-            <input name="category_name" type="text" placeholder="类别名称" class="uk-width-3-5">
-            <div class="uk-width-1-6"><input type="submit" class="uk-button" id="my-btn-save" value="保存"/></div>
+            <input name="category_name" type="text" placeholder="类别名称" class="uk-width-3-5" required>
+            <div class="uk-width-1-6">
+                <button class="uk-button uk-button-primary"><i class="uk-icon-check"></i> 保存</button>
+            </div>
         </div>
     </form>
 
@@ -36,14 +39,16 @@ manage category
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>Table Data</td>
-                <td>Table Data</td>
-                <td>
-                    <a href="#"><i class="uk-icon-edit"></i>编辑</a> /
-                    <a href="#"><i class="uk-icon-trash-o"></i>删除</a>
-                </td>
-            </tr>
+            {% for result in results %}
+                <tr>
+                    <td>{{result.name}}</td>
+                    <td>{{result.count}}</td>
+                    <td>
+                        <a href="javascript:void(0)" data="{{result.id}}" class="my-btn-edit"><i class="uk-icon-edit"></i>编辑</a> /
+                        <a href="javascript:void(0)" data="{{result.id}}" class="my-btn-delete"><i class="uk-icon-trash-o"></i>删除</a>
+                    </td>
+                </tr>
+            {% endfor %}
         </tbody>
     </table>
 
@@ -51,5 +56,24 @@ manage category
 {% endblock %}
 
 {% block script %}
+<script>
+    $(function(){
+        // 编辑
+        $(".my-btn-edit").click(function(){
+            var id = $(this).attr('data');
+            var name = $(this).parent().siblings().first().text();
+            $("input[name='category_id']").val(id);
+            $("input[name='category_name']").val(name).focus();
+        });
 
+        // 删除
+        $(".my-btn-delete").click(function(){
+            var name = $(this).parent().siblings().first().text();
+            if(confirm("确定删除类别 <"+name+"> ?")) {
+                var id = $(this).attr('data');
+                window.location.href = "/manage/category/edit?id="+id;
+            }
+        });
+    })
+</script>
 {% endblock %}
