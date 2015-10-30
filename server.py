@@ -60,7 +60,6 @@ class Login:
 
     def POST(self):
         args = web.input()
-        print(web.cookies().webpy_session_id)
         username = args.get('username', None)
         password = args.get('password', None)
         if username and password:
