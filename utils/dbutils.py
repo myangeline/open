@@ -198,6 +198,28 @@ def update_blog(title, summary, content, category_id, blog_id):
         connection.close()
 
 
+def get_user(name, password):
+    """
+    获取用户
+    :param name:
+    :param password:
+    :return:
+    """
+    connection = get_db()
+    try:
+        with connection.cursor() as cursor:
+            sql = "select * from users where name=%s and password=%s"
+            cursor.execute(sql, (name, password))
+            result = cursor.fetchone()
+            return result
+    except Exception as e:
+        print(e)
+        return None
+    finally:
+        connection.close()
+
+
+
 if __name__ == '__main__':
     # connection = get_db()
     # try:

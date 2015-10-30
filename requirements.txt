@@ -1,3 +1,4 @@
+mistune
 pymysql
 requests
 Jinja2==2.8

@@ -78,8 +78,17 @@ if __name__ == '__main__':
     #     print(item)
     # with open("G:/workspace/open/static/files/bottle笔记.md", 'r') as fh:
     #     content = fh.read()
-    headers = {'content-type': 'text/plain'}
-
-    resp = requests.post('https://api.github.com/markdown/raw', data="Hello world github/linguist#1 **cool**, and #1!", headers={'content-type': 'text/plain'})
-    print(resp.text)
+    # headers = {'content-type': 'text/plain'}
+    #
+    # resp = requests.post('https://api.github.com/markdown/raw', data="Hello world github/linguist#1 **cool**, and #1!", headers={'content-type': 'text/plain'})
+    # print(resp.text)
+    content = """
+        def get_db(db=db):
+            conn = pymongo.Connection(host, port)
+            conn.admin.authenticate(user, password)
+            database = conn[db]
+            return database
+    """
+    content = highlight(content, PythonLexer(), HtmlFormatter())
+    print(content)
     pass

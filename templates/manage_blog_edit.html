@@ -77,13 +77,17 @@ edit blog
                 alert("上次文档必须为markdown格式！");
                 return false;
             }
-            $("input[name='title']").val(names[names.length-2]);
+            var content = names[names.length-2];
+            $("input[name='title']").val(content);
+            $("input[name='summary']").val(content);
         }
     }
 
     $(function(){
         var category_id = "{{blog.category_id}}";
-        $("select[name='category_id']").val(category_id);
+        if(category_id!="") {
+            $("select[name='category_id']").val(category_id);
+        }
         $('.my-btn-back').click(function(){
             location.href = "/manage";
         });

@@ -1,18 +1,13 @@
 # coding=utf-8
-from pygments import highlight
-from pygments.formatters.html import HtmlFormatter
-from pygments.lexers.python import PythonLexer
-import requests
-
 import web
 from web.contrib.template import render_jinja
 
 from conf import settings
-from utils import markdown2
 from utils.dbutils import get_category, add_category, delete_category, update_category, get_all_category, add_blog, \
-    get_blog, delete_blog, get_blogs, update_blog
+    get_blog, delete_blog, get_blogs, update_blog, get_user
 from utils.templateutils import register
-from utils.utils import upload, get_session
+from utils.utils import upload, get_session, render_markdown, md5, login_decorator
+
 
 __author__ = 'sunshine'
 
@@ -25,8 +20,7 @@ urls = (
     '/manage/blog/delete', 'ManageBlogDelete',
     '/manage/category', 'ManageCategory',
     '/manage/category/edit', 'ManageCategoryEdit',
-    '/blog/(\d+)', 'Blog',
-    '/demo', 'Demo'
+    '/blog/(\d+)', 'Blog'
 )
 
 app = web.application(urls, locals())
@@ -38,24 +32,6 @@ render = render_jinja('templates', encoding='utf-8')
 
 # 注册jinja2模板的自定义过滤器
 register(render)
-
-
-class Demo:
-    def GET(self):
-        with open(u'static/files/bottle笔记.md', 'r') as fh:
-            content = fh.read()
-            # content = highlight(content, PythonLexer(), HtmlFormatter())
-            # print('=============================================================')
-            # resp = requests.post('https://api.github.com/markdown/raw',
-            #                      data=content,
-            #                      headers={'content-type': 'text/plain'})
-            # content = resp.text
-            # content = highlight(content, PythonLexer(), HtmlFormatter())
-            # print(content)
-        # content = markdown2.markdown(content.decode('utf-8'), ['codehilite'])
-        content = markdown2.markdown(content.decode('utf-8'))
-        print(content)
-        return render.demo(locals())
 
 
 class Index:
@@ -80,24 +56,34 @@ class Login:
     登录页
     """
     def GET(self):
-        session['name'] = 'admin'
-        print(session['name'], session.name)
-        print(session['count'])
         return render.login(locals())
 
     def POST(self):
-        pass
+        args = web.input()
+        print(web.cookies().webpy_session_id)
+        username = args.get('username', None)
+        password = args.get('password', None)
+        if username and password:
+            password = md5(password)
+            user = get_user(username, password)
+            if user:
+                # 登录成功保存客户端的session_id,如果关闭浏览器或者更换浏览器则session失效
+                # 登录的功能没做好，可以在登录成功后生成一个token返回，客户端每次请求都要带上这个token，这样就比较好的控制
+                session.login = web.cookies().webpy_session_id
+                raise web.seeother('/manage')
+        raise web.seeother('/login')
 
 
 class ManageCategory:
     """
     类别管理页
     """
-
+    @login_decorator
     def GET(self):
         results = get_category()
         return render.manage_category(locals())
 
+    @login_decorator
     def POST(self):
         category_name = web.input().get('category_name', None)
         if category_name:
@@ -114,7 +100,6 @@ class ManageCategoryEdit:
     """
     编辑类别
     """
-
     def GET(self):
         category_id = web.input().get('id', None)
         if category_id:
@@ -126,7 +111,7 @@ class ManageBlogDelete:
     """
     删除文章
     """
-
+    @login_decorator
     def GET(self):
         blog_id = web.input().get('id', None)
         if blog_id:
@@ -138,7 +123,7 @@ class ManageBlog:
     """
     博客管理页
     """
-
+    @login_decorator
     def GET(self):
         blogs = get_blogs()
         return render.manage_blog(locals())
@@ -148,7 +133,7 @@ class ManageBlogEdit:
     """
     编辑文章
     """
-
+    @login_decorator
     def GET(self):
         blog_id = web.input().get("id", None)
         categories = get_all_category()
@@ -158,6 +143,7 @@ class ManageBlogEdit:
             blog = None
         return render.manage_blog_edit(locals())
 
+    @login_decorator
     def POST(self):
         args = web.input(content={})
         blog_id = args.get("id", None)
@@ -182,16 +168,10 @@ class Blog:
     def GET(self, blog_id):
         print("blog:", blog_id)
         blog = get_blog(blog_id)
-        print(blog)
-        # todo 每次去请求有点慢，可以存入数据库
         with open(blog['content'], 'r') as fh:
             content = fh.read()
-            resp = requests.post('https://api.github.com/markdown/raw',
-                                 data=content,
-                                 headers={'content-type': 'text/plain'})
-            content = resp.text
-            # content = highlight(content, PythonLexer(), HtmlFormatter())
-            print('content: ', content)
+            content = render_markdown(content)
+            content = unicode(content, 'utf-8')
         return render.blog(locals())
 
 
