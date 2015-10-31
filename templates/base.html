@@ -15,42 +15,12 @@
             <li><a href="#">笔记</a></li>
             <li><a href="#">源码</a></li>
         </ul>
-        <div class="logo">
-            <a href="/">
-                open
-                <!--<img src="/static/images/logo.png" alt="open logo">-->
-            </a>
-        </div>
-    </div>
 
-    <div class="sphinxsidebar" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper" style="top: 0;">
-            <div id="searchbox" role="search">
-                <h3>快速索引</h3>
-
-                <form class="search" action="/search/" method="get">
-                    <input type="text" name="query" placeholder="搜索文章">
-                    <input type="submit" value="搜索">
-                    <input type="hidden" name="check_keywords" value="yes">
-                    <input type="hidden" name="area" value="default">
-                </form>
-                <p class="searchtip" style="font-size: 90%">
-                    输入需要搜索的关键字
-                </p>
-            </div>
-            <h3><a href="/">文章分类</a></h3>
-            <ul>
-                {% for blog in blogs %}
-                    <li>
-                        <a class="reference internal" href="#">{{blog}}</a>
-                        <ul>
-                            {% for item in blogs[blog] %}
-                                <li><a href="/blog/{{item.id}}">{{item.title|format_str}}</a></li>
-                            {% endfor %}
-                        </ul>
-                    </li>
-                {% endfor %}
-            </ul>
+        <div class="my-uk-search">
+            <form class="uk-form">
+                <input type="text" name="keyword" placeholder="关键字">
+                <button class="uk-button uk-button-primary">搜索</button>
+            </form>
         </div>
     </div>
 
@@ -66,7 +36,7 @@
         </div>
         <div class="clearer"></div>
         <div class="footer">
-            © Copyright 2014. Created using web.py[<a href="/login">admin</a>]
+            © Copyright 2014. Created using web.py[<a href="/manage">admin</a>]
         </div>
     </div>
 </div>
