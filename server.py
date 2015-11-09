@@ -99,6 +99,7 @@ class ManageCategoryEdit:
     """
     编辑类别
     """
+    @login_decorator
     def GET(self):
         category_id = web.input().get('id', None)
         if category_id:
@@ -165,7 +166,6 @@ class Blog:
     文章
     """
     def GET(self, blog_id):
-        print("blog:", blog_id)
         blog = get_blog(blog_id)
         with open(blog['content'], 'r') as fh:
             content = fh.read()
