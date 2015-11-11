@@ -219,7 +219,6 @@ def get_user(name, password):
         connection.close()
 
 
-
 if __name__ == '__main__':
     # connection = get_db()
     # try:
