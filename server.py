@@ -5,6 +5,7 @@ from web.contrib.template import render_jinja
 from conf import settings
 from utils.dbutils import get_category, add_category, delete_category, update_category, get_all_category, add_blog, \
     get_blog, delete_blog, get_blogs, update_blog, get_user
+from utils.mongodbutils import MongodbUtil
 from utils.templateutils import register
 from utils.utils import upload, get_session, render_markdown, md5, login_decorator
 
@@ -33,13 +34,16 @@ render = render_jinja('templates', encoding='utf-8')
 # 注册jinja2模板的自定义过滤器
 register(render)
 
+mu = MongodbUtil()
+
 
 class Index:
     """
     首页
     """
     def GET(self):
-        blogs = get_blogs()
+        # blogs = get_blogs()
+        blogs = mu.get_blog()
         items = {}
         for blog in blogs:
             name = blog['name']
@@ -64,7 +68,9 @@ class Login:
         password = args.get('password', None)
         if username and password:
             password = md5(password)
-            user = get_user(username, password)
+            print(password)
+            # user = get_user(username, password)
+            user = mu.get_user(username, password)
             if user:
                 # 登录成功保存客户端的session_id,如果关闭浏览器或者更换浏览器则session失效
                 # 登录的功能没做好，可以在登录成功后生成一个token返回，客户端每次请求都要带上这个token，这样就比较好的控制
@@ -125,7 +131,8 @@ class ManageBlog:
     """
     @login_decorator
     def GET(self):
-        blogs = get_blogs()
+        # blogs = get_blogs()
+        blogs = mu.get_blog()
         return render.manage_blog(locals())
 
 

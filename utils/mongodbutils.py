@@ -108,6 +108,7 @@ class MongodbUtil(object):
 if __name__ == '__main__':
     mu = MongodbUtil()
     # mu.db.student.insert({'name': "卢加诺", "age": 22})
-    for i in mu.db.student.find():
-        print(i['name'])
+    # for i in mu.db.student.find():
+    #     print(i['name'])
+    mu.db.db_user.insert({'name': 'admin', 'pwd': '6412121cbb2dc2cb9e460cfee7046be2'})
     pass
