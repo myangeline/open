@@ -66,13 +66,43 @@ class MongodbUtil(object):
         self.db['db_blog'].remove({'_id': ObjectId(blog_id)})
 
     def update_blog(self, blog):
-        pass
+        """
+        更新文章
+        :param blog:
+        :return:
+        """
+        kwargs = dict()
+        if blog.title:
+            kwargs['title'] = blog.title
+        if blog.summary:
+            kwargs['summary'] = blog.summary
+        if blog.html_content:
+            kwargs['html_content'] = blog.html_content
+        if blog.source_content:
+            kwargs['source_content'] = blog.source_content
+        if blog.category:
+            kwargs['category'] = blog.category
+        self.db['db_blog'].update({'_id': ObjectId(blog.id)}, kwargs)
 
     def insert_blog(self, blog):
-        pass
+        """
+        添加文章
+        :param blog:
+        :return:
+        """
+        self.db['db_blog'].insert({'title': blog.title, 'html_content': blog.html_content,
+                                   'source_content': blog.source_content, 'category': blog.category,
+                                   'create_time': blog.create_time})
 
     def get_user(self, name, pwd):
-        pass
+        """
+        根据用户名和密码获取用户
+        :param name:
+        :param pwd:
+        :return:
+        """
+        user = self.db['db_user'].find_one({'name': name, 'pwd': pwd})
+        return user
 
 
 if __name__ == '__main__':

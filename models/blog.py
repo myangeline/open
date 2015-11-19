@@ -12,3 +12,9 @@ class Blog(object):
     category = "python"
     create_time = datetime.datetime.utcnow()
 
+
+if __name__ == '__main__':
+    blog = Blog()
+    print(blog.__class__.__dict__)
+    pass
+
