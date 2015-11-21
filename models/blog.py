@@ -3,11 +3,12 @@ import datetime
 __author__ = 'sunshine'
 
 
-class Blog(object):
+class Blogs(object):
     id = None
     title = ""
     summary = ""
     html_content = ""
     source_content = ""
-    category = "python"
-    create_time = datetime.datetime.utcnow()
+    category = ""
+    category_id = ""
+    create_time = datetime.datetime.now()

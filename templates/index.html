@@ -19,7 +19,7 @@
                 <h2>{{blog}}</h2>
                 <ul>
                     {% for item in blogs[blog] %}
-                        <li><a href="/blog/{{item.id}}">{{loop.index}}. {{item.title}}</a></li>
+                        <li><a href="/blog/{{item._id}}">{{loop.index}}. {{item.title}}</a></li>
                     {% endfor %}
                 </ul>
             </div>

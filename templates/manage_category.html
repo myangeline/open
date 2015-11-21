@@ -39,13 +39,13 @@ manage category
             </tr>
         </thead>
         <tbody>
-            {% for result in results %}
+            {% for result in categories %}
                 <tr>
                     <td>{{result.name}}</td>
                     <td>{{result.count}}</td>
                     <td>
-                        <a href="javascript:void(0)" data="{{result.id}}" class="my-btn-edit"><i class="uk-icon-edit"></i>编辑</a> /
-                        <a href="javascript:void(0)" data="{{result.id}}" class="my-btn-delete"><i class="uk-icon-trash-o"></i>删除</a>
+                        <a href="javascript:void(0)" data="{{result._id}}" class="my-btn-edit"><i class="uk-icon-edit"></i>编辑</a> /
+                        <a href="javascript:void(0)" data="{{result._id}}" class="my-btn-delete"><i class="uk-icon-trash-o"></i>删除</a>
                     </td>
                 </tr>
             {% endfor %}

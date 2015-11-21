@@ -21,16 +21,16 @@ edit blog
     <button class="uk-button uk-button-primary my-btn-back"><i class="uk-icon-angle-left"></i> 返回</button>
 
     <form class="uk-form" action="/manage/blog/edit" method="post" enctype="multipart/form-data">
-        <input type="hidden" name="id" value="{{blog.id}}"/>
+        <input type="hidden" name="id" value="{{blog._id}}"/>
         <div class="uk-grid">
             <div class="uk-width-1-10"><lable>类别</lable></div>
             <div class="uk-width-4-5">
                 <select name="category_id" class="uk-width-1-2">
                     {% for category in categories %}
-                        <option value="{{category.id}}">{{category.name}}</option>
+                        <option value="{{category._id}}">{{category.name}}</option>
                     {% endfor %}
                 </select>
-                <button class="uk-button uk-button-primary" onclick="location.href='/manage/category'">
+                <button class="uk-button uk-button-primary btn-add-category">
                     <i class="uk-icon-plus"></i> 添加类别</button>
             </div>
         </div>
@@ -51,7 +51,7 @@ edit blog
             <div class="uk-width-1-10"><lable>文章</lable></div>
             <div class="uk-form-file">
                 <button class="uk-button">上传文章</button>
-                <input type="file" name="content" required onchange="preview(this)">
+                <input type="file" name="content" onchange="preview(this)">
             </div>
         </div>
 
@@ -90,6 +90,10 @@ edit blog
         }
         $('.my-btn-back').click(function(){
             location.href = "/manage";
+        });
+
+        $('.btn-add-category').click(function(){
+            location.href='/manage/category';
         });
     })
 </script>

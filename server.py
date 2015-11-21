@@ -3,11 +3,12 @@ import web
 from web.contrib.template import render_jinja
 
 from conf import settings
-from utils.dbutils import get_category, add_category, delete_category, update_category, get_all_category, add_blog, \
-    get_blog, delete_blog, get_blogs, update_blog, get_user
+from models.blog import Blogs
+from models.category import Category
+from utils.dbutils import delete_blog
 from utils.mongodbutils import MongodbUtil
 from utils.templateutils import register
-from utils.utils import upload, get_session, render_markdown, md5, login_decorator
+from utils.utils import get_session, render_markdown, md5, login_decorator
 
 
 __author__ = 'sunshine'
@@ -21,7 +22,7 @@ urls = (
     '/manage/blog/delete', 'ManageBlogDelete',
     '/manage/category', 'ManageCategory',
     '/manage/category/edit', 'ManageCategoryEdit',
-    '/blog/(\d+)', 'Blog'
+    '/blog/(.+)', 'Blog'
 )
 
 app = web.application(urls, locals())
@@ -41,12 +42,12 @@ class Index:
     """
     首页
     """
+
     def GET(self):
-        # blogs = get_blogs()
         blogs = mu.get_blog()
         items = {}
         for blog in blogs:
-            name = blog['name']
+            name = blog['category']
             if name in items:
                 items[name].append(blog)
             else:
@@ -59,6 +60,7 @@ class Login:
     """
     登录页
     """
+
     def GET(self):
         return render.login(locals())
 
@@ -68,8 +70,6 @@ class Login:
         password = args.get('password', None)
         if username and password:
             password = md5(password)
-            print(password)
-            # user = get_user(username, password)
             user = mu.get_user(username, password)
             if user:
                 # 登录成功保存客户端的session_id,如果关闭浏览器或者更换浏览器则session失效
@@ -83,9 +83,10 @@ class ManageCategory:
     """
     类别管理页
     """
+
     @login_decorator
     def GET(self):
-        results = get_category()
+        categories = mu.get_category()
         return render.manage_category(locals())
 
     @login_decorator
@@ -94,10 +95,12 @@ class ManageCategory:
         if category_name:
             category_name = category_name.strip()
         category_id = web.input().get('category_id', None)
-        if category_id and category_name:
-            update_category(category_name, category_id)
-        elif category_name:
-            add_category(category_name, 1)
+        category = Category()
+        if category_id:
+            category.id = category_id
+        if category_name:
+            category.name = category_name
+        mu.update_category(category)
         raise web.seeother('/manage/category')
 
 
@@ -105,11 +108,12 @@ class ManageCategoryEdit:
     """
     编辑类别
     """
+
     @login_decorator
     def GET(self):
         category_id = web.input().get('id', None)
         if category_id:
-            delete_category(category_id)
+            mu.del_category(category_id)
         raise web.seeother('/manage/category')
 
 
@@ -117,6 +121,7 @@ class ManageBlogDelete:
     """
     删除文章
     """
+
     @login_decorator
     def GET(self):
         blog_id = web.input().get('id', None)
@@ -129,9 +134,9 @@ class ManageBlog:
     """
     博客管理页
     """
+
     @login_decorator
     def GET(self):
-        # blogs = get_blogs()
         blogs = mu.get_blog()
         return render.manage_blog(locals())
 
@@ -140,12 +145,13 @@ class ManageBlogEdit:
     """
     编辑文章
     """
+
     @login_decorator
     def GET(self):
         blog_id = web.input().get("id", None)
-        categories = get_all_category()
+        categories = mu.get_category()
         if blog_id:
-            blog = get_blog(blog_id)
+            blog = mu.get_blog(blog_id)
         else:
             blog = None
         return render.manage_blog_edit(locals())
@@ -157,14 +163,28 @@ class ManageBlogEdit:
         category_id = args.get("category_id", None)
         title = args.get("title", None)
         summary = args.get("summary", None)
+        blog = Blogs()
+        if title:
+            blog.title = title
+        if summary:
+            blog.summary = summary
+
+        if category_id:
+            category = mu.get_category(category_id)
+            blog.category = category['name']
+            blog.category_id = category_id
+
         if 'content' in args:
-            path = upload(args.content.filename, args.content.file)
-        else:
-            path = ""
+            source_content = args.content.file.read()
+            blog.source_content = source_content
+            content = render_markdown(source_content)
+            html_content = unicode(content, 'utf-8')
+            blog.html_content = html_content
         if blog_id:
-            update_blog(title, summary, path, category_id, blog_id)
+            blog.id = blog_id
+            mu.update_blog(blog)
         else:
-            add_blog(title, summary, path, category_id)
+            mu.insert_blog(blog)
         raise web.seeother('/manage')
 
 
@@ -172,12 +192,13 @@ class Blog:
     """
     文章
     """
+
     def GET(self, blog_id):
-        blog = get_blog(blog_id)
-        with open(blog['content'], 'r') as fh:
-            content = fh.read()
-            content = render_markdown(content)
-            content = unicode(content, 'utf-8')
+        blog = mu.get_blog(blog_id)
+        if 'html_content' in blog:
+            content = blog['html_content']
+        else:
+            content = ''
         return render.blog(locals())
 
 

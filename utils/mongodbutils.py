@@ -14,13 +14,16 @@ class MongodbUtil(object):
         db.authenticate(user, pwd, source='admin')
         self.db = db
 
-    def get_category(self):
+    def get_category(self, category_id=None):
         """
         获取所有分类
+        :param category_id:
         :return:
         """
-        categories = self.db['tb_category'].find()
-        return categories
+        if category_id:
+            return self.db['dt_category'].find_one({'_id': ObjectId(category_id)})
+        else:
+            return self.db['dt_category'].find()
 
     def del_category(self, category_id):
         """
@@ -28,7 +31,7 @@ class MongodbUtil(object):
         :param category_id:
         :return:
         """
-        self.db['db_category'].remove({'_id': ObjectId(category_id)})
+        self.db['dt_category'].remove({'_id': ObjectId(category_id)})
 
     def update_category(self, category):
         """
@@ -36,15 +39,23 @@ class MongodbUtil(object):
         :param category:
         :return:
         """
-        self.db['db_category'].update({'_id': ObjectId(category.id)}, {"$set": {"name": category.name}})
+        if category.id:
+            self.db['dt_category'].update({'_id': ObjectId(category.id)},
+                                          {"$set": {"name": category.name}})
+        else:
+            self.db['dt_category'].insert({"name": category.name, 'count': category.count,
+                                           'create_time': category.create_time})
 
-    def insert_category(self, category):
+    def update_category_count(self, category_id, count=1):
         """
-        添加类别
-        :param category:
+        更新类别中文章的数量
+        :param category_id:
+        :param count:
         :return:
         """
-        self.db['db_category'].insert({"name": category.name, 'create_time': category.create_time})
+        category = self.get_category(category_id)
+        self.db['dt_category'].update({'_id': ObjectId(category_id)},
+                                      {"$set": {"count": count+category['count']}})
 
     def get_blog(self, blog_id=None):
         """
@@ -53,9 +64,9 @@ class MongodbUtil(object):
         :return:
         """
         if blog_id:
-            return self.db['db_blog'].find_one({'_id': ObjectId(blog_id)})
+            return self.db['dt_blog'].find_one({'_id': ObjectId(blog_id)})
         else:
-            return self.db['db_blog'].find()
+            return self.db['dt_blog'].find()
 
     def del_blog(self, blog_id):
         """
@@ -63,7 +74,7 @@ class MongodbUtil(object):
         :param blog_id:
         :return:
         """
-        self.db['db_blog'].remove({'_id': ObjectId(blog_id)})
+        self.db['dt_blog'].remove({'_id': ObjectId(blog_id)})
 
     def update_blog(self, blog):
         """
@@ -82,7 +93,7 @@ class MongodbUtil(object):
             kwargs['source_content'] = blog.source_content
         if blog.category:
             kwargs['category'] = blog.category
-        self.db['db_blog'].update({'_id': ObjectId(blog.id)}, kwargs)
+        self.db['dt_blog'].update({'_id': ObjectId(blog.id)}, {'$set': kwargs})
 
     def insert_blog(self, blog):
         """
@@ -90,9 +101,10 @@ class MongodbUtil(object):
         :param blog:
         :return:
         """
-        self.db['db_blog'].insert({'title': blog.title, 'html_content': blog.html_content,
+        self.db['dt_blog'].insert({'title': blog.title, 'summary': blog.summary, 'html_content': blog.html_content,
                                    'source_content': blog.source_content, 'category': blog.category,
-                                   'create_time': blog.create_time})
+                                   'category_id': blog.category_id, 'create_time': blog.create_time})
+        self.update_category_count(blog.category_id)
 
     def get_user(self, name, pwd):
         """
@@ -101,14 +113,14 @@ class MongodbUtil(object):
         :param pwd:
         :return:
         """
-        user = self.db['db_user'].find_one({'name': name, 'pwd': pwd})
+        user = self.db['dt_user'].find_one({'name': name, 'pwd': pwd})
         return user
 
 
 if __name__ == '__main__':
-    mu = MongodbUtil()
+    # mu = MongodbUtil()
     # mu.db.student.insert({'name': "卢加诺", "age": 22})
     # for i in mu.db.student.find():
     #     print(i['name'])
-    mu.db.db_user.insert({'name': 'admin', 'pwd': '6412121cbb2dc2cb9e460cfee7046be2'})
+    # mu.db.dt_user.insert({'name': 'admin', 'pwd': '6412121cbb2dc2cb9e460cfee7046be2'})
     pass

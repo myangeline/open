@@ -30,11 +30,11 @@ manage blog
                 <tr>
                     <td>{{blog.title}}</td>
                     <td>{{blog.summary}}</td>
-                    <td>{{blog.name}}</td>
-                    <td>{{blog.created_at}}</td>
+                    <td>{{blog.category}}</td>
+                    <td>{{blog.create_time}}</td>
                     <td>
-                        <a href="#" class="my-blog-edit" data="{{blog.id}}"><i class="uk-icon-edit"></i>编辑</a> /
-                        <a href="#" class="my-blog-delete" data="{{blog.id}}"><i class="uk-icon-trash-o"></i>删除</a>
+                        <a href="#" class="my-blog-edit" data="{{blog._id}}"><i class="uk-icon-edit"></i>编辑</a> /
+                        <a href="#" class="my-blog-delete" data="{{blog._id}}"><i class="uk-icon-trash-o"></i>删除</a>
                     </td>
                 </tr>
             {% endfor%}
