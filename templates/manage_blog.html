@@ -9,11 +9,16 @@ manage blog
     .content{
         margin-top: 20px;
     }
+    .my-btn-write{
+        float: right;
+    }
 </style>
 {% endblock %}
 
 {% block content %}
 <div class="content">
+    <button class="uk-button uk-button-primary"> 文章管理</button>
+    <button class="uk-button uk-button-primary my-btn-category"> 类别管理</button>
     <button class="uk-button uk-button-primary my-btn-write"><i class="uk-icon-plus"></i> 写文章</button>
     <table class="uk-table uk-table-hover uk-table-striped uk-table-condensed">
         <thead>
@@ -46,6 +51,10 @@ manage blog
 {% block script %}
 <script>
     $(function(){
+        $(".my-btn-category").click(function(){
+            window.location.href = "/manage/category";
+        });
+
         $(".my-btn-write").click(function(){
             window.location.href = "/manage/blog/edit";
         });

@@ -6,7 +6,6 @@ from web.contrib.template import render_jinja
 from conf import settings
 from models.blog import Blogs
 from models.category import Category
-from utils.dbutils import delete_blog
 from utils.mongodbutils import MongodbUtil
 from utils.templateutils import register
 from utils.utils import get_session, render_markdown, md5, login_decorator
@@ -208,3 +207,4 @@ class Blog:
 if __name__ == '__main__':
     web.config.debug = settings.debug
     app.run()
+    # app.wsgifunc()
