@@ -1,4 +1,5 @@
 # coding=utf-8
+import datetime
 import web
 from web.contrib.template import render_jinja
 
@@ -100,13 +101,14 @@ class ManageCategory:
             category.id = category_id
         if category_name:
             category.name = category_name
+        category.create_time = datetime.datetime.now()
         mu.update_category(category)
         raise web.seeother('/manage/category')
 
 
 class ManageCategoryEdit:
     """
-    编辑类别
+    编辑类别(删除)
     """
 
     @login_decorator
@@ -126,7 +128,7 @@ class ManageBlogDelete:
     def GET(self):
         blog_id = web.input().get('id', None)
         if blog_id:
-            delete_blog(blog_id)
+            mu.del_blog(blog_id)
         raise web.seeother('/manage')
 
 
@@ -180,6 +182,7 @@ class ManageBlogEdit:
             content = render_markdown(source_content)
             html_content = unicode(content, 'utf-8')
             blog.html_content = html_content
+        blog.create_time = datetime.datetime.now()
         if blog_id:
             blog.id = blog_id
             mu.update_blog(blog)

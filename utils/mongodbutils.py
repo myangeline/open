@@ -41,7 +41,9 @@ class MongodbUtil(object):
         """
         if category.id:
             self.db['dt_category'].update({'_id': ObjectId(category.id)},
-                                          {"$set": {"name": category.name}})
+                                          {"$set": {"name": category.name, 'create_time': category.create_time}})
+            # 修改类别后需要更新文章中的类别名称
+            self.update_blog_category(category.id, category.name)
         else:
             self.db['dt_category'].insert({"name": category.name, 'count': category.count,
                                            'create_time': category.create_time})
@@ -74,7 +76,10 @@ class MongodbUtil(object):
         :param blog_id:
         :return:
         """
+        # 删除文章后需要减去类别中对文章的统计
+        blog = self.get_blog(blog_id)
         self.db['dt_blog'].remove({'_id': ObjectId(blog_id)})
+        self.update_category_count(blog['category_id'], -1)
 
     def update_blog(self, blog):
         """
@@ -93,7 +98,17 @@ class MongodbUtil(object):
             kwargs['source_content'] = blog.source_content
         if blog.category:
             kwargs['category'] = blog.category
+        kwargs['create_time'] = blog.create_time
         self.db['dt_blog'].update({'_id': ObjectId(blog.id)}, {'$set': kwargs})
+
+    def update_blog_category(self, category_id, category_name):
+        """
+        更新文章中的类别名称
+        :param category_id:
+        :param category_name:
+        :return:
+        """
+        self.db['dt_blog'].update({'category_id': category_id}, {'$set': {'category': category_name}})
 
     def insert_blog(self, blog):
         """
