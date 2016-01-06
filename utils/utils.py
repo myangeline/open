@@ -1,5 +1,6 @@
 # coding=utf-8
 import os
+import re
 import uuid
 from jinja2 import Environment
 from jinja2 import FileSystemLoader
@@ -77,14 +78,26 @@ class HighlightRenderer(mistune.Renderer):
     """
     获取代码块，并做一些高亮的处理，可以直接使用pygments进行转换的操作
     暂时只能支持python的语法，其他的语言高亮还未做好
+
+    现在可以支持
+    ```lang
+    code
+    ```
+    这样的语法，然后根据lang的语言名称获取pygments的对应的解析器，然后就可以解析出不同语言，
+    设置对应的语法高亮
     """
     def block_code(self, code, lang):
+        block_lexer = mistune.BlockLexer()
+        m = re.match(block_lexer.grammar_class.fences, code)
+        if m:
+            lang = m.group(2)
+            code = m.group(3)
         if not lang:
             code = highlight(code.decode('utf-8'), PythonLexer(), HtmlFormatter())
             return code.encode('utf-8')
         lexer = get_lexer_by_name(lang, stripall=True)
         formatter = HtmlFormatter()
-        return highlight(code, lexer, formatter)
+        return highlight(code, lexer, formatter).encode('utf-8')
 
 
 def render_markdown(code):
@@ -132,6 +145,16 @@ def login_decorator(func):
 
 
 if __name__ == '__main__':
-    print(md5('jin@ll1314'))
-    print(get_token())
+    # print(md5('jin@ll1314'))
+    # print(get_token())
+    doc = """
+asasasasasa
+
+    ```java
+    System.out.println("Hello, Java!)
+    ```
+asasasas
+"""
+    md = render_markdown(doc)
+    print(md)
     pass
